@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency Operations Command Center (EOCC) | AI Traffic Intelligence</title>
+    <meta name="description" content="AI-Based Emergency Intelligence and Response System Using YOLO - Real-time vehicle detection, collision risk analysis, and emergency response operations dashboard.">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <div class="app-shell">
+        <!-- ==================================================================
+             LEFT SIDEBAR NAVIGATION
+             ================================================================== -->
+        <aside class="app-sidebar" id="app-sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-badge">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                        <line x1="12" y1="9" x2="12" y2="13"/>
+                        <line x1="12" y1="17" x2="12.01" y2="17"/>
+                    </svg>
+                </div>
+                <div class="brand-info">
+                    <div class="brand-title">EOCC Command</div>
+                    <div class="brand-sub">YOLO Intelligence</div>
+                </div>
+            </div>
+
+            <nav class="sidebar-menu">
+                <div class="menu-category-label">Monitoring & Intelligence</div>
+
+                <a class="nav-item active" data-target="view-overview">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="7" height="9"/>
+                        <rect x="14" y="3" width="7" height="5"/>
+                        <rect x="14" y="12" width="7" height="9"/>
+                        <rect x="3" y="16" width="7" height="5"/>
+                    </svg>
+                    <span>Overview</span>
+                </a>
+
+                <a class="nav-item" data-target="view-live">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="23 7 16 12 23 17 23 7"/>
+                        <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+                    </svg>
+                    <span>Live Monitoring</span>
+                    <span class="nav-counter" id="sidebar-live-pill" style="background: var(--risk-low);">LIVE</span>
+                </a>
+
+                <a class="nav-item" data-target="view-upload">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="17 8 12 3 7 8"/>
+                        <line x1="12" y1="3" x2="12" y2="15"/>
+                    </svg>
+                    <span>Upload Video</span>
+                </a>
+
+                <a class="nav-item" data-target="view-vehicles">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="1" y="3" width="15" height="13"/>
+                        <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+                        <circle cx="5.5" cy="18.5" r="2.5"/>
+                        <circle cx="18.5" cy="18.5" r="2.5"/>
+                    </svg>
+                    <span>Vehicle Detection</span>
+                </a>
+
+                <a class="nav-item" data-target="view-analysis">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                    </svg>
+                    <span>Accident Analysis</span>
+                </a>
+
+                <div class="menu-category-label">Response & History</div>
+
+                <a class="nav-item" data-target="view-alerts">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                    </svg>
+                    <span>Emergency Alerts</span>
+                    <span class="nav-counter" id="sidebar-alert-badge">0</span>
+                </a>
+
+                <a class="nav-item" data-target="view-history">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 14 14"/>
+                    </svg>
+                    <span>Incident History</span>
+                </a>
+
+                <div class="menu-category-label">System</div>
+
+                <a class="nav-item" data-target="view-about">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="12" y1="16" x2="12" y2="12"/>
+                        <line x1="12" y1="8" x2="12.01" y2="8"/>
+                    </svg>
+                    <span>About System</span>
+                </a>
+
+                <a class="nav-item" data-target="view-settings">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                    </svg>
+                    <span>Settings</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-status-box">
+                <div class="sidebar-status-row">
+                    <span>Engine:</span>
+                    <span class="sidebar-status-val" id="sb-engine-val">YOLOv8n</span>
+                </div>
+                <div class="sidebar-status-row">
+                    <span>Host:</span>
+                    <span class="sidebar-status-val" id="sb-host-val">Local / Render</span>
+                </div>
+                <div class="sidebar-status-row" style="margin-bottom: 0;">
+                    <span>Protocol:</span>
+                    <span class="sidebar-status-val" style="color: var(--cyan-glow);">REST + MJPEG</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- ==================================================================
+             MAIN WRAPPER & TOP NAVIGATION BAR
+             ================================================================== -->
+        <div class="app-main">
+            <header class="app-header">
+                <div class="header-left-group">
+                    <button class="sidebar-toggle-btn" id="sidebar-toggle-btn" aria-label="Toggle Sidebar Navigation">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="3" y1="12" x2="21" y2="12"/>
+                            <line x1="3" y1="6" x2="21" y2="6"/>
+                            <line x1="3" y1="18" x2="21" y2="18"/>
+                        </svg>
+                    </button>
+                    <div class="view-heading">
+                        <h1 class="view-title" id="page-title">Overview Dashboard</h1>
+                        <span class="view-sub" id="page-subtitle">Emergency Operations Command Center • Surveillance Zone Sector 1</span>
+                    </div>
+                </div>
+
+                <div class="header-right-group">
+                    <!-- Live Backend Status Indicator -->
+                    <div class="live-pill" id="backend-status-pill">
+                        <span class="pulse-dot"></span>
+                        <span id="backend-status-text">Backend Connected</span>
+                    </div>
+
+                    <!-- Telemetry Clock -->
+                    <div class="telemetry-clock" id="telemetry-clock">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        <span id="clock-display">--:--:-- UTC</span>
+                    </div>
+
+                    <!-- Notifications Dropdown Button -->
+                    <button class="header-icon-btn" id="btn-notifications-drawer" title="Emergency Notifications">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                        </svg>
+                        <span class="badge-dot" id="header-notif-dot" style="display: none;"></span>
+                    </button>
+
+                    <!-- Settings Button -->
+                    <button class="header-icon-btn" id="btn-quick-settings" title="Backend Connection Settings">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="3"/>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                        </svg>
+                    </button>
+
+                    <!-- User Profile Pill -->
+                    <div class="operator-profile-pill">
+                        <div class="operator-avatar">HS</div>
+                        <div class="operator-meta">
+                            <span class="operator-name">Himanath Sai</span>
+                            <span class="operator-role">Watch Commander</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Notifications Drawer Dropdown -->
+            <div class="notification-drawer" id="notification-drawer">
+                <div class="drawer-header">
+                    <span>Active Incident Feed</span>
+                    <button class="btn btn-sm btn-secondary" style="padding: 2px 6px;" onclick="App.navigateTo('view-alerts')">View All</button>
+                </div>
+                <div class="drawer-body" id="drawer-notifications-list">
+                    <p style="color: var(--text-muted); font-size: 0.78rem; text-align: center; padding: 1rem;">No unread critical alerts.</p>
+                </div>
+            </div>
+
+            <!-- ==================================================================
+                 VIEW CONTENT BODY
+                 ================================================================== -->
+            <main class="view-content-body">
+
+                <!-- 1. OVERVIEW DASHBOARD -->
+                <section class="view-section active" id="view-overview">
+                    <!-- Metrics Row (6 KPI Cards) -->
+                    <div class="metrics-row">
+                        <div class="kpi-card">
+                            <div class="kpi-header">
+                                <span class="kpi-title">Vehicles Detected</span>
+                                <div class="kpi-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>
+                            </div>
+                            <div class="kpi-value" id="kpi-total-vehicles">0</div>
+                            <div class="kpi-footer">Across all feeds & uploads</div>
+                        </div>
+
+                        <div class="kpi-card">
+                            <div class="kpi-header">
+                                <span class="kpi-title">Total Incidents</span>
+                                <div class="kpi-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+                            </div>
+                            <div class="kpi-value" id="kpi-total-incidents">0</div>
+                            <div class="kpi-footer">Logged to SQLite DB</div>
+                        </div>
+
+                        <div class="kpi-card risk-high">
+                            <div class="kpi-header">
+                                <span class="kpi-title">High-Risk Hazards</span>
+                                <div class="kpi-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--risk-high)" stroke-width="2"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+                            </div>
+                            <div class="kpi-value" id="kpi-high-risk" style="color: var(--risk-high);">0</div>
+                            <div class="kpi-footer">Collision & vulnerability alerts</div>
+                        </div>
+
+                        <div class="kpi-card risk-med">
+                            <div class="kpi-header">
+                                <span class="kpi-title">Medium-Risk Alerts</span>
+                                <div class="kpi-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--risk-med)" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg></div>
+                            </div>
+                            <div class="kpi-value" id="kpi-med-risk" style="color: var(--risk-med);">0</div>
+                            <div class="kpi-footer">Close vehicle proximity</div>
+                        </div>
+
+                        <div class="kpi-card risk-low">
+                            <div class="kpi-header">
+                                <span class="kpi-title">Resolved Incidents</span>
+                                <div class="kpi-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--risk-low)" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+                            </div>
+                            <div class="kpi-value" id="kpi-resolved" style="color: var(--risk-low);">0</div>
+                            <div class="kpi-footer">Operator verified & cleared</div>
+                        </div>
+
+                        <div class="kpi-card">
+                            <div class="kpi-header">
+                                <span class="kpi-title">System Status</span>
+                                <div class="kpi-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--cyan-glow)" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+                            </div>
+                            <div class="kpi-value" id="kpi-sys-status" style="font-size: 1.35rem; color: var(--cyan-glow);">OPERATIONAL</div>
+                            <div class="kpi-footer" id="kpi-sys-sub">YOLOv8 Inference Online</div>
+                        </div>
+                    </div>
+
+                    <!-- Main Grid: Surveillance Feeder + Risk Distribution -->
+                    <div class="grid-2col">
+                        <!-- Live Feeder Preview Panel -->
+                        <div class="panel-box">
+                            <div class="panel-header-bar">
+                                <div class="panel-header-title">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+                                    <span>Surveillance Camera Feed Preview</span>
+                                </div>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <button class="btn btn-sm btn-primary" onclick="App.navigateTo('view-live')">Expand Fullscreen</button>
+                                </div>
+                            </div>
+                            <div style="background: #000; position: relative; aspect-ratio: 16/9; max-height: 380px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                                <img id="overview-stream-img" class="surveillance-feed-img" alt="Camera Stream Preview">
+                                <div class="cam-hud-badge">
+                                    <span class="rec-blink"></span>
+                                    <span>CAM-01 • HIGHWAY CORRIDOR NORTH</span>
+                                </div>
+                                <div class="cam-hud-telemetry" id="overview-hud-fps">25 FPS • AI ACTIVE</div>
+                            </div>
+                            <div style="padding: 0.75rem 1.25rem; background: var(--bg-surface); display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem;">
+                                <span style="color: var(--text-secondary);">Real-time stream feed inferred via YOLOv8 model</span>
+                                <span class="badge badge-low">STREAM HEALTHY</span>
+                            </div>
+                        </div>
+
+                        <!-- Risk Distribution & Health Specs -->
+                        <div class="panel-box">
+                            <div class="panel-header-bar">
+                                <div class="panel-header-title">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                                    <span>Risk Distribution & Health</span>
+                                </div>
+                                <button class="btn btn-sm btn-secondary" onclick="App.refreshAllData()">Refresh</button>
+                            </div>
+                            <div class="panel-inner-body" style="display: flex; flex-direction: column; gap: 1rem;">
+                                <!-- Risk Breakdown Meter -->
+                                <div>
+                                    <div style="display: flex; justify-content: space-between; font-size: 0.78rem; margin-bottom: 0.35rem;">
+                                        <span style="color: var(--risk-high); font-weight: 700;">High Risk (<span id="dist-high-pct">0%</span>)</span>
+                                        <span style="color: var(--risk-med); font-weight: 700;">Medium Risk (<span id="dist-med-pct">0%</span>)</span>
+                                        <span style="color: var(--risk-low); font-weight: 700;">Low Risk (<span id="dist-low-pct">0%</span>)</span>
+                                    </div>
+                                    <div style="height: 10px; background: var(--bg-input); border-radius: 999px; display: flex; overflow: hidden;">
+                                        <div id="bar-dist-high" style="background: var(--risk-high); width: 0%; transition: width 0.3s;"></div>
+                                        <div id="bar-dist-med" style="background: var(--risk-med); width: 0%; transition: width 0.3s;"></div>
+                                        <div id="bar-dist-low" style="background: var(--risk-low); width: 100%; transition: width 0.3s;"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Vehicle Category Breakdown -->
+                                <div style="background: var(--bg-surface); padding: 0.85rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                                    <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; margin-bottom: 0.5rem;">Target Vehicle Classes</div>
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; font-size: 0.78rem;">
+                                        <div style="display: flex; justify-content: space-between;"><span>Passenger Cars:</span><strong id="cat-cars-val">Active</strong></div>
+                                        <div style="display: flex; justify-content: space-between;"><span>Heavy Trucks:</span><strong id="cat-trucks-val">Active</strong></div>
+                                        <div style="display: flex; justify-content: space-between;"><span>Public Transit Buses:</span><strong id="cat-buses-val">Active</strong></div>
+                                        <div style="display: flex; justify-content: space-between;"><span>Motorcycles:</span><strong id="cat-motorcycles-val">Active</strong></div>
+                                        <div style="display: flex; justify-content: space-between;"><span>Bicycles:</span><strong id="cat-bicycles-val">Active</strong></div>
+                                        <div style="display: flex; justify-content: space-between;"><span>Pedestrians:</span><strong id="cat-pedestrians-val">Active</strong></div>
+                                    </div>
+                                </div>
+
+                                <!-- Quick Operator Action -->
+                                <button class="btn btn-secondary" style="width: 100%;" onclick="App.openManualAlertModal()">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                    <span>Log Manual Operator Alert</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Alerts Activity Feed Table -->
+                    <div class="panel-box">
+                        <div class="panel-header-bar">
+                            <div class="panel-header-title">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/></svg>
+                                <span>Recent Critical Emergency Events</span>
+                            </div>
+                            <button class="btn btn-sm btn-secondary" onclick="App.navigateTo('view-history')">Audit Full History →</button>
+                        </div>
+                        <div class="table-wrapper">
+                            <table class="eocc-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Timestamp</th>
+                                        <th>Location Sector</th>
+                                        <th>Incident Classification</th>
+                                        <th>Risk Tier</th>
+                                        <th>Confidence</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="overview-incidents-tbody">
+                                    <tr>
+                                        <td colspan="8" style="text-align: center; color: var(--text-muted); padding: 2rem;">
+                                            Synchronizing incident feed with backend...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 2. LIVE MONITORING -->
+                <section class="view-section" id="view-live">
+                    <div class="grid-2col">
+                        <!-- Main Video Surveillance Screen -->
+                        <div class="panel-box" style="margin-bottom: 0;">
+                            <div class="panel-header-bar">
+                                <div class="panel-header-title">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"/></svg>
+                                    <span id="live-cam-title">Surveillance Feeder CAM-01 • Highway Corridor</span>
+                                </div>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <button class="btn btn-sm btn-secondary" id="btn-toggle-stream">Pause Feed</button>
+                                    <button class="btn btn-sm btn-secondary" id="btn-reconnect-stream">Reconnect</button>
+                                </div>
+                            </div>
+
+                            <div class="surveillance-viewport" id="surveillance-player-box">
+                                <img id="main-live-stream-img" class="surveillance-feed-img" alt="Live CCTV Monitoring Stream">
+                                <div class="cam-hud-badge">
+                                    <span class="rec-blink"></span>
+                                    <span id="cam-hud-label">CAM-01 • HIGHWAY CORRIDOR NORTH</span>
+                                </div>
+                                <div class="cam-hud-telemetry" id="cam-hud-telemetry">FPS: 25.0 • LATENCY: ~18ms</div>
+                            </div>
+
+                            <div class="surveillance-toolbar">
+                                <div class="camera-tab-selector">
+                                    <button class="cam-tab-btn active" data-cam="0" onclick="App.selectCamera(0, this)">CAM-01 (Highway)</button>
+                                    <button class="cam-tab-btn" data-cam="1" onclick="App.selectCamera(1, this)">CAM-02 (Arterial)</button>
+                                    <button class="cam-tab-btn" data-cam="2" onclick="App.selectCamera(2, this)">CAM-03 (Intersection)</button>
+                                </div>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <button class="btn btn-sm btn-danger" onclick="App.openManualAlertModal()">🚨 Trigger Operator Alert</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Live Telemetry & Detection Readout Sidebar -->
+                        <div class="panel-box" style="margin-bottom: 0;">
+                            <div class="panel-header-bar">
+                                <div class="panel-header-title">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                                    <span>Real-Time Ingestion Telemetry</span>
+                                </div>
+                            </div>
+                            <div class="panel-inner-body" style="display: flex; flex-direction: column; gap: 1rem;">
+                                <div style="background: var(--bg-surface); padding: 0.85rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                                    <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-bottom: 0.5rem;">Spatial Risk Assessment</div>
+                                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                                        <span style="font-size: 0.88rem; font-weight: 700;">Collision Probability:</span>
+                                        <span class="badge badge-low" id="live-risk-indicator">SAFE FLOW</span>
+                                    </div>
+                                </div>
+
+                                <div style="background: var(--bg-surface); padding: 0.85rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                                    <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-bottom: 0.5rem;">Real-time Object Counts</div>
+                                    <div style="display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.82rem;">
+                                        <div style="display: flex; justify-content: space-between;"><span>Passenger Cars:</span><strong id="live-cars-count">Scanning...</strong></div>
+                                        <div style="display: flex; justify-content: space-between;"><span>Heavy Trucks:</span><strong id="live-trucks-count">Scanning...</strong></div>
+                                        <div style="display: flex; justify-content: space-between;"><span>Two-Wheelers:</span><strong id="live-bikes-count">Scanning...</strong></div>
+                                        <div style="display: flex; justify-content: space-between;"><span>Pedestrians:</span><strong id="live-pedestrians-count">Scanning...</strong></div>
+                                    </div>
+                                </div>
+
+                                <div style="background: rgba(0, 210, 255, 0.05); padding: 0.85rem; border-radius: var(--radius-sm); border: 1px solid rgba(0, 210, 255, 0.2); font-size: 0.76rem; color: var(--text-secondary); line-height: 1.4;">
+                                    <strong style="color: var(--cyan-glow); display: block; margin-bottom: 0.25rem;">Automated Pipeline:</strong>
+                                    Video frames are extracted by OpenCV at 25 FPS, bounded boxes generated with YOLOv8 nano, and geometric IoU overlaps analyzed for collision warnings.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 3. UPLOAD VIDEO & FOOTAGE -->
+                <section class="view-section" id="view-upload">
+                    <div class="panel-box">
+                        <div class="panel-header-bar">
+                            <div class="panel-header-title">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                                <span>Surveillance Video & Imagery Ingestion</span>
+                            </div>
+                        </div>
+                        <div class="panel-inner-body">
+                            <div class="grid-equal2" style="margin-bottom: 1rem;">
+                                <div>
+                                    <label style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-bottom: 0.35rem; font-weight: 600;">SURVEILLANCE LOCATION TAG</label>
+                                    <input type="text" class="form-control" id="upload-location-tag" value="Expressway Junction Corridor 4" style="width: 100%;">
+                                </div>
+                                <div>
+                                    <label style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-bottom: 0.35rem; font-weight: 600;">VIDEO FRAME SAMPLE RATE</label>
+                                    <select class="form-control" id="upload-sample-rate" style="width: 100%;">
+                                        <option value="1">Analyze Every Frame (High Precision / Slow)</option>
+                                        <option value="2" selected>Analyze Every 2nd Frame (Standard EOCC Recommended)</option>
+                                        <option value="5">Analyze Every 5th Frame (High Speed Rapid Scan)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Drag & Drop Zone -->
+                            <div class="upload-dropzone" id="upload-dropzone">
+                                <div style="font-size: 2.25rem; color: var(--cyan-glow); margin-bottom: 0.5rem;">
+                                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                                </div>
+                                <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 0.25rem;">Drag & Drop Video or Snapshot File</h3>
+                                <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 1rem;">Supported formats: MP4, AVI, MOV, MKV, JPG, PNG, WEBP (Max size: 100 MB)</p>
+                                <button class="btn btn-primary" type="button" onclick="document.getElementById('file-input').click();">Select Surveillance File</button>
+                                <input type="file" id="file-input" style="display: none;" accept="video/mp4,video/avi,video/quicktime,video/x-matroska,image/jpeg,image/png,image/webp">
+                                <div id="selected-file-label" style="margin-top: 0.85rem; font-size: 0.82rem; color: var(--cyan-glow); font-weight: 700;"></div>
+                            </div>
+
+                            <div style="margin-top: 1.25rem; display: flex; justify-content: flex-end;">
+                                <button class="btn btn-primary" id="btn-start-upload" disabled>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                                    <span>Execute AI Detection & Analysis</span>
+                                </button>
+                            </div>
+
+                            <!-- Progress Bar -->
+                            <div id="upload-progress-container" style="display: none; margin-top: 1.25rem;">
+                                <div style="display: flex; justify-content: space-between; font-size: 0.78rem; margin-bottom: 0.35rem;">
+                                    <span id="upload-status-text">Processing frames via YOLOv8 model...</span>
+                                    <span id="upload-pct-label">Inference Active...</span>
+                                </div>
+                                <div class="progress-bar-track">
+                                    <div class="progress-bar-fill" style="background: linear-gradient(90deg, #0EA5E9, #00D2FF); width: 100%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Upload Results Container -->
+                    <div class="panel-box" id="upload-results-panel" style="display: none;">
+                        <div class="panel-header-bar">
+                            <div class="panel-header-title">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                                <span>Inference Telemetry & Output Viewer</span>
+                            </div>
+                            <span class="badge" id="upload-result-badge">EVALUATION</span>
+                        </div>
+                        <div class="panel-inner-body">
+                            <div class="grid-2col" style="margin-bottom: 0;">
+                                <div>
+                                    <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; margin-bottom: 0.4rem;">Annotated AI Visual Feed</div>
+                                    <div id="upload-media-container" style="background: #000; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); min-height: 260px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                                        <!-- Injected via JS -->
+                                    </div>
+                                    <div style="margin-top: 0.75rem; display: flex; gap: 0.5rem;" id="upload-download-container">
+                                        <!-- Download button dynamically populated -->
+                                    </div>
+                                </div>
+                                <div>
+                                    <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; margin-bottom: 0.4rem;">Geometric Risk Telemetry</div>
+                                    <div id="upload-summary-details" style="font-size: 0.82rem; display: flex; flex-direction: column; gap: 0.75rem;">
+                                        <!-- Injected via JS -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 4. VEHICLE DETECTION ARCHITECTURE -->
+                <section class="view-section" id="view-vehicles">
+                    <div class="panel-box">
+                        <div class="panel-header-bar">
+                            <div class="panel-header-title">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                                <span>YOLOv8 Multi-Class Target Vehicle Architecture</span>
+                            </div>
+                        </div>
+                        <div class="panel-inner-body">
+                            <p style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 1.25rem;">
+                                The detection pipeline utilizes the Ultralytics YOLOv8 nano network. The model classifies and locates 6 mission-critical road user entities with bounding-box regression.
+                            </p>
+
+                            <div class="grid-3col">
+                                <div class="kpi-card">
+                                    <div class="kpi-header"><span class="kpi-title">Class 2: Passenger Car</span><span class="badge badge-low">COCO #2</span></div>
+                                    <div class="kpi-value" style="font-size: 1.25rem; color: var(--cyan-glow);">Sedan, SUV, Van</div>
+                                    <div class="kpi-footer">Threshold: Conf &ge; 0.35 • Primary vehicle class</div>
+                                </div>
+
+                                <div class="kpi-card">
+                                    <div class="kpi-header"><span class="kpi-title">Class 7: Heavy Truck</span><span class="badge badge-low">COCO #7</span></div>
+                                    <div class="kpi-value" style="font-size: 1.25rem; color: var(--cyan-glow);">Lorry, Freight, Trailer</div>
+                                    <div class="kpi-footer">Large bounding footprint • High blindspot weighting</div>
+                                </div>
+
+                                <div class="kpi-card">
+                                    <div class="kpi-header"><span class="kpi-title">Class 5: Transit Bus</span><span class="badge badge-low">COCO #5</span></div>
+                                    <div class="kpi-value" style="font-size: 1.25rem; color: var(--cyan-glow);">Public Coach, Bus</div>
+                                    <div class="kpi-footer">High occupant safety priority classification</div>
+                                </div>
+
+                                <div class="kpi-card">
+                                    <div class="kpi-header"><span class="kpi-title">Class 3: Motorcycle</span><span class="badge badge-low">COCO #3</span></div>
+                                    <div class="kpi-value" style="font-size: 1.25rem; color: var(--risk-med);">Scooter, Two-Wheeler</div>
+                                    <div class="kpi-footer">Vulnerable road user • Proximity threshold &lt; 50px</div>
+                                </div>
+
+                                <div class="kpi-card">
+                                    <div class="kpi-header"><span class="kpi-title">Class 1: Bicycle</span><span class="badge badge-low">COCO #1</span></div>
+                                    <div class="kpi-value" style="font-size: 1.25rem; color: var(--risk-med);">Cyclist, Bike</div>
+                                    <div class="kpi-footer">Non-motorized road user • High collision sensitivity</div>
+                                </div>
+
+                                <div class="kpi-card">
+                                    <div class="kpi-header"><span class="kpi-title">Class 0: Pedestrian</span><span class="badge badge-low">COCO #0</span></div>
+                                    <div class="kpi-value" style="font-size: 1.25rem; color: var(--risk-high);">Person on Road</div>
+                                    <div class="kpi-footer">Critical vulnerability • Zero IoU tolerance trigger</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 5. ACCIDENT ANALYSIS -->
+                <section class="view-section" id="view-analysis">
+                    <div class="panel-box">
+                        <div class="panel-header-bar">
+                            <div class="panel-header-title">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+                                <span>Collision Risk & Proximity Heuristic Analysis</span>
+                            </div>
+                        </div>
+                        <div class="panel-inner-body">
+                            <!-- Prominent Safety Disclaimer -->
+                            <div style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.25); padding: 0.9rem 1.25rem; border-radius: var(--radius-sm); margin-bottom: 1.5rem; display: flex; gap: 0.75rem; align-items: center;">
+                                <div style="font-size: 1.5rem; color: var(--risk-high);">⚠️</div>
+                                <div style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.4;">
+                                    <strong style="color: var(--risk-high);">Important Safety Classification Standard:</strong>
+                                    All telemetry outputs produced by this system represent <strong>Estimated Collision Risks</strong> based on 2D camera geometry and bounding-box proximity. In strict accordance with emergency operations protocols, risk indicators do not constitute confirmed physical accidents until verified by a qualified watch officer.
+                                </div>
+                            </div>
+
+                            <div class="grid-equal2">
+                                <div>
+                                    <h4 style="font-size: 0.88rem; font-weight: 700; margin-bottom: 0.5rem;">Geometric Risk Matrix</h4>
+                                    <div class="table-wrapper">
+                                        <table class="eocc-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Risk Tier</th>
+                                                    <th>Mathematical Metric</th>
+                                                    <th>Response Protocol</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td><span class="badge badge-high">HIGH RISK</span></td>
+                                                    <td>IoU &ge; 0.15 OR Dist &lt; 35px</td>
+                                                    <td>Immediate EOCC alert + Dispatch standby</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><span class="badge badge-medium">MEDIUM RISK</span></td>
+                                                    <td>IoU &ge; 0.04 OR Dist &lt; 75px</td>
+                                                    <td>Logged proximity hazard warning</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><span class="badge badge-low">LOW RISK</span></td>
+                                                    <td>Centroid Dist &ge; 75px</td>
+                                                    <td>Standard highway traffic monitoring</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <h4 style="font-size: 0.88rem; font-weight: 700; margin-bottom: 0.5rem;">Mathematical Foundation</h4>
+                                    <div style="background: var(--bg-surface); border: 1px solid var(--border-subtle); padding: 1rem; border-radius: var(--radius-sm); font-size: 0.78rem; color: var(--text-secondary); display: flex; flex-direction: column; gap: 0.65rem;">
+                                        <div>
+                                            <strong style="color: var(--cyan-glow);">Intersection over Union (IoU):</strong><br>
+                                            <code>IoU(A, B) = Area(A ∩ B) / Area(A ∪ B)</code><br>
+                                            Quantifies overlapping 2D area between vehicles or obstacles.
+                                        </div>
+                                        <div>
+                                            <strong style="color: var(--cyan-glow);">Euclidean Centroid Distance:</strong><br>
+                                            <code>Distance = √((cx₁ - cx₂)² + (cy₁ - cy₂)²)</code><br>
+                                            Measures spatial clearance between vehicle centroids and pedestrian coordinates.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 6. EMERGENCY ALERTS -->
+                <section class="view-section" id="view-alerts">
+                    <div class="panel-box">
+                        <div class="panel-header-bar">
+                            <div class="panel-header-title">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                                <span>Emergency Incident Alert Management Board</span>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <button class="btn btn-sm btn-primary" onclick="App.openManualAlertModal()">Create Alert</button>
+                                <button class="btn btn-sm btn-secondary" onclick="App.loadAlerts()">Refresh</button>
+                            </div>
+                        </div>
+                        <div class="panel-inner-body">
+                            <!-- Filter Buttons -->
+                            <div style="display: flex; gap: 0.5rem; margin-bottom: 1.25rem;">
+                                <button class="btn btn-sm btn-secondary active-filter" data-filter="ALL" onclick="App.filterAlerts('ALL', this)">All Priority</button>
+                                <button class="btn btn-sm btn-secondary" data-filter="HIGH" onclick="App.filterAlerts('HIGH', this)">Critical & High</button>
+                                <button class="btn btn-sm btn-secondary" data-filter="MEDIUM" onclick="App.filterAlerts('MEDIUM', this)">Medium Alerts</button>
+                            </div>
+
+                            <div id="alerts-card-list" style="display: flex; flex-direction: column; gap: 1rem;">
+                                <p style="text-align: center; color: var(--text-muted); padding: 2rem;">Loading incident records...</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 7. INCIDENT HISTORY -->
+                <section class="view-section" id="view-history">
+                    <div class="panel-box">
+                        <div class="panel-header-bar">
+                            <div class="panel-header-title">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
+                                <span>Incident Management History Audit Log</span>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <button class="btn btn-sm btn-secondary" onclick="App.exportIncidentsCSV()">Export CSV</button>
+                                <button class="btn btn-sm btn-secondary" onclick="App.loadHistory()">Refresh</button>
+                            </div>
+                        </div>
+                        <div class="panel-inner-body">
+                            <!-- Filter Controls -->
+                            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1rem;">
+                                <div style="flex: 1; min-width: 200px;">
+                                    <input type="text" class="form-control" id="history-search-input" placeholder="Search by incident ID, sector, or keyword..." style="width: 100%;">
+                                </div>
+                                <div>
+                                    <select class="form-control" id="history-risk-filter">
+                                        <option value="">All Risk Tiers</option>
+                                        <option value="HIGH">High Risk</option>
+                                        <option value="MEDIUM">Medium Risk</option>
+                                        <option value="LOW">Low Risk</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <select class="form-control" id="history-status-filter">
+                                        <option value="">All Statuses</option>
+                                        <option value="ACTIVE">Active</option>
+                                        <option value="ACKNOWLEDGED">Acknowledged</option>
+                                        <option value="RESOLVED">Resolved</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="table-wrapper">
+                                <table class="eocc-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Incident ID</th>
+                                            <th>Timestamp (UTC)</th>
+                                            <th>Surveillance Sector</th>
+                                            <th>Incident Classification</th>
+                                            <th>Risk Tier</th>
+                                            <th>Confidence</th>
+                                            <th>Dispatch Status</th>
+                                            <th>Status</th>
+                                            <th>Inspection</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="history-incidents-tbody">
+                                        <tr>
+                                            <td colspan="9" style="text-align: center; color: var(--text-muted); padding: 2rem;">Loading history records...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 8. ABOUT SYSTEM -->
+                <section class="view-section" id="view-about">
+                    <div class="panel-box">
+                        <div class="panel-header-bar">
+                            <div class="panel-header-title">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                                <span>Capstone System Specification</span>
+                            </div>
+                        </div>
+                        <div class="panel-inner-body" style="font-size: 0.88rem; line-height: 1.6;">
+                            <h2 style="font-size: 1.25rem; font-weight: 800; color: var(--cyan-glow); margin-bottom: 0.35rem;">
+                                AI-Based Emergency Intelligence and Response System Using YOLO
+                            </h2>
+                            <p style="color: var(--text-secondary); margin-bottom: 1.25rem;">
+                                Senior College Capstone Project developed for <strong>CSA1713 - Artificial Intelligence</strong> (Review 2).
+                            </p>
+
+                            <div class="grid-equal2" style="margin-bottom: 1.5rem;">
+                                <div style="background: var(--bg-surface); padding: 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                                    <h4 style="font-size: 0.85rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem;">Project Contributors</h4>
+                                    <ul style="list-style: none; padding-left: 0; font-size: 0.8rem; color: var(--text-secondary); display: flex; flex-direction: column; gap: 0.25rem;">
+                                        <li>• <strong>M. Himanath Sai</strong> (Reg: 192525246)</li>
+                                        <li>• <strong>P. Arjun</strong> (Reg: 192524194)</li>
+                                        <li>• <strong>K. Lohith Kumar</strong> (Reg: 192511155)</li>
+                                        <li>• <strong>K. Sampath</strong> (Reg: 192572006)</li>
+                                    </ul>
+                                </div>
+                                <div style="background: var(--bg-surface); padding: 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                                    <h4 style="font-size: 0.85rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem;">Academic Guide & Department</h4>
+                                    <p style="font-size: 0.8rem; color: var(--text-secondary);">
+                                        <strong>Project Guide:</strong> Dr. Sundar Rajan S.<br>
+                                        Department of Artificial Intelligence<br>
+                                        Saveetha University (SIMATS), Chennai, India
+                                    </p>
+                                </div>
+                            </div>
+
+                            <h3 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 0.5rem;">The Four Core Modules</h3>
+                            <div class="grid-equal2" style="margin-bottom: 1.5rem;">
+                                <div style="background: var(--bg-surface); padding: 0.85rem; border-radius: var(--radius-sm);">
+                                    <strong style="color: var(--cyan-glow);">1. Video Processing</strong>
+                                    <p style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 0.25rem;">
+                                        Extracts high-resolution frames from surveillance cameras, IP RTSP streams, and recorded video files via OpenCV.
+                                    </p>
+                                </div>
+                                <div style="background: var(--bg-surface); padding: 0.85rem; border-radius: var(--radius-sm);">
+                                    <strong style="color: var(--cyan-glow);">2. Vehicle & Object Detection</strong>
+                                    <p style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 0.25rem;">
+                                        YOLOv8 network performs single-stage bounding-box classification for cars, buses, trucks, motorcycles, bicycles, and pedestrians.
+                                    </p>
+                                </div>
+                                <div style="background: var(--bg-surface); padding: 0.85rem; border-radius: var(--radius-sm);">
+                                    <strong style="color: var(--cyan-glow);">3. Accident Analysis</strong>
+                                    <p style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 0.25rem;">
+                                        Spatial heuristic engine evaluates IoU overlapping percentages and centroid proximity vectors to classify collision risks.
+                                    </p>
+                                </div>
+                                <div style="background: var(--bg-surface); padding: 0.85rem; border-radius: var(--radius-sm);">
+                                    <strong style="color: var(--cyan-glow);">4. Alert & Response Dashboard</strong>
+                                    <p style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 0.25rem;">
+                                        Command center interface providing real-time incident audit logs, video streaming, and simulated emergency response signals.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 9. SETTINGS -->
+                <section class="view-section" id="view-settings">
+                    <div class="panel-box">
+                        <div class="panel-header-bar">
+                            <div class="panel-header-title">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                                <span>EOCC System & Backend Configuration</span>
+                            </div>
+                        </div>
+                        <div class="panel-inner-body" style="max-width: 600px;">
+                            <div style="margin-bottom: 1.25rem;">
+                                <label style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-bottom: 0.35rem; font-weight: 700;">RENDER BACKEND API BASE URL</label>
+                                <input type="url" class="form-control" id="page-settings-backend-url" placeholder="https://emergency-intelligence-backend.onrender.com" style="width: 100%;">
+                                <p style="font-size: 0.72rem; color: var(--text-muted); margin-top: 0.35rem;">
+                                    Default for local development: <code>http://localhost:5000</code>. When deploying on Vercel, enter your assigned Render domain.
+                                </p>
+                            </div>
+
+                            <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+                                <button class="btn btn-secondary" id="btn-page-test-conn">Test Connection</button>
+                                <button class="btn btn-primary" id="btn-page-save-url">Save URL</button>
+                                <button class="btn btn-secondary" id="btn-page-reset-url">Reset to Localhost</button>
+                            </div>
+
+                            <div id="page-settings-status" style="font-size: 0.8rem; padding: 0.75rem; border-radius: var(--radius-sm); display: none;"></div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- ==================================================================
+         MODALS & DIALOGS
+         ================================================================== -->
+
+    <!-- Quick Settings Modal (Top bar trigger) -->
+    <div class="modal-overlay" id="settings-modal">
+        <div class="modal-frame">
+            <div class="modal-header-row">
+                <h3 style="font-size: 0.95rem; font-weight: 700;">⚙️ Backend Connection Settings</h3>
+                <button class="modal-close-x" onclick="App.closeSettingsModal()">×</button>
+            </div>
+            <div class="modal-content-area">
+                <div style="margin-bottom: 1rem;">
+                    <label style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-bottom: 0.35rem; font-weight: 700;">RENDER BACKEND BASE URL</label>
+                    <input type="url" class="form-control" id="settings-backend-url" placeholder="https://emergency-intelligence-backend.onrender.com" style="width: 100%;">
+                </div>
+                <div id="settings-test-result" style="font-size: 0.78rem; margin-top: 0.5rem; display: none;"></div>
+            </div>
+            <div class="modal-action-footer">
+                <button class="btn btn-secondary" id="btn-test-backend-conn">Test</button>
+                <button class="btn btn-primary" id="btn-save-backend-url">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Incident Detail Verification Modal -->
+    <div class="modal-overlay" id="incident-detail-modal">
+        <div class="modal-frame">
+            <div class="modal-header-row">
+                <h3 id="modal-incident-title" style="font-size: 0.95rem; font-weight: 700;">Incident Inspection</h3>
+                <button class="modal-close-x" onclick="App.closeIncidentModal()">×</button>
+            </div>
+            <div class="modal-content-area" id="modal-incident-body">
+                <!-- Dynamically loaded -->
+            </div>
+            <div class="modal-action-footer">
+                <button class="btn btn-secondary" onclick="App.closeIncidentModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Manual Alert Creation Modal -->
+    <div class="modal-overlay" id="manual-alert-modal">
+        <div class="modal-frame">
+            <div class="modal-header-row">
+                <h3 style="font-size: 0.95rem; font-weight: 700;">🚨 Create Manual Operator Alert</h3>
+                <button class="modal-close-x" onclick="App.closeManualAlertModal()">×</button>
+            </div>
+            <div class="modal-content-area">
+                <div style="display: flex; flex-direction: column; gap: 0.85rem;">
+                    <div>
+                        <label style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700; display: block; margin-bottom: 0.25rem;">INCIDENT CLASSIFICATION</label>
+                        <input type="text" class="form-control" id="manual-type" value="COLLISION_PROXIMITY_ALERT" style="width: 100%;">
+                    </div>
+                    <div>
+                        <label style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700; display: block; margin-bottom: 0.25rem;">RISK LEVEL</label>
+                        <select class="form-control" id="manual-risk" style="width: 100%;">
+                            <option value="HIGH">HIGH (Imminent Hazard)</option>
+                            <option value="MEDIUM" selected>MEDIUM (Proximity Caution)</option>
+                            <option value="LOW">LOW (Informational)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700; display: block; margin-bottom: 0.25rem;">SURVEILLANCE SECTOR LOCATION</label>
+                        <input type="text" class="form-control" id="manual-location" value="North Highway Junction 4" style="width: 100%;">
+                    </div>
+                    <div>
+                        <label style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700; display: block; margin-bottom: 0.25rem;">OPERATOR OBSERVATION</label>
+                        <textarea class="form-control" id="manual-desc" rows="3" style="width: 100%;">Operator identified erratic movement and rapid deceleration between heavy truck and passenger car.</textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-action-footer">
+                <button class="btn btn-secondary" onclick="App.closeManualAlertModal()">Cancel</button>
+                <button class="btn btn-primary" id="btn-submit-manual-alert">Log Alert</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Confirmation Action Modal -->
+    <div class="modal-overlay" id="confirm-modal">
+        <div class="modal-frame" style="max-width: 440px;">
+            <div class="modal-header-row">
+                <h3 id="confirm-modal-title" style="font-size: 0.95rem; font-weight: 700;">Confirm Action</h3>
+                <button class="modal-close-x" onclick="App.closeConfirmModal()">×</button>
+            </div>
+            <div class="modal-content-area">
+                <p id="confirm-modal-msg" style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5;"></p>
+            </div>
+            <div class="modal-action-footer">
+                <button class="btn btn-secondary" onclick="App.closeConfirmModal()">Cancel</button>
+                <button class="btn btn-danger" id="confirm-modal-btn">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

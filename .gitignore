@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environments
+.env
+.venv
+env.bak/
+venv.bak/
+
+# SQLite
+backend/data/*.db
+backend/data/*.db-journal
+
+# Temporary runtime uploads and outputs (keep folders via .gitkeep)
+backend/uploads/*
+!backend/uploads/.gitkeep
+backend/outputs/snapshots/*
+!backend/outputs/snapshots/.gitkeep
+backend/outputs/videos/*
+!backend/outputs/videos/.gitkeep
+
+# Operating System files
+.DS_Store
+Thumbs.db
+desktop.ini
